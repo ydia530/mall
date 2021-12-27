@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.yuan.mall.mapper.UmsAdminMapper">
+
+
+    <select id="getPermissionList" resultType="com.yuan.mall.entity.ums.UmsPermission">
+        select b.id, b.name, b.value, b.icon, b.type, b.uri, b.status
+        from ums_admin_permission_relation a join ums_permission b on a.permission_id = b.id
+        where admin_id = ${adminId}
+    </select>
+
+</mapper>
