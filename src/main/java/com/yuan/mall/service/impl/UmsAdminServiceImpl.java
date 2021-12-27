@@ -88,6 +88,7 @@ public class UmsAdminServiceImpl implements UmsAdminService {
 
     @Override
     public List<UmsPermission> getPermissionList(Integer adminId) {
-        return null;
+        List<UmsPermission> permissions = umsAdminMapper.getPermissionList(adminId);
+        return permissions;
     }
 }
