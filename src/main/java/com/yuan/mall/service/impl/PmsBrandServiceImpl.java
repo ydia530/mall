@@ -2,7 +2,7 @@ package com.yuan.mall.service.impl;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.yuan.mall.mapper.PmsBrandMapper;
-import com.yuan.mall.model.PmsBrand;
+import com.yuan.mall.entity.pms.PmsBrand;
 import com.yuan.mall.service.PmsBrandService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

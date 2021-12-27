@@ -48,10 +48,6 @@ public class UmsMemberServiceImpl implements UmsMemberService {
     @Override
     public Boolean verify(String telephone, String code) {
         String correctCode = (String) redisUtil.get(REDIS_KEY_PREFIX_AUTH_CODE + telephone);
-        if (StringUtils.isNotEmpty(correctCode) && correctCode.equals(code)){
-            return true;
-        } else {
-            return false;
-        }
+        return StringUtils.isNotEmpty(correctCode) && correctCode.equals(code);
     }
 }

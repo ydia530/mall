@@ -1,7 +1,7 @@
 package com.yuan.mall.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.yuan.mall.model.PmsBrand;
+import com.yuan.mall.entity.pms.PmsBrand;
 import org.apache.ibatis.annotations.Mapper;
 import java.util.List;
 

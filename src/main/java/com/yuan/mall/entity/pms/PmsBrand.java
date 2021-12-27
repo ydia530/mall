@@ -1,4 +1,4 @@
-package com.yuan.mall.model;
+package com.yuan.mall.entity.pms;
 
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
@@ -62,4 +62,17 @@ public class PmsBrand implements Serializable {
      */
     private String brandStory;
 
+    /**
+     * @author diaoyuan
+     */
+    @Data
+    public static class UmsAdminRoleRelation implements Serializable {
+        private Long id;
+
+        private Long adminId;
+
+        private Long roleId;
+
+        private static final long serialVersionUID = 1L;
+    }
 }

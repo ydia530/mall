@@ -1,6 +1,6 @@
 package com.yuan.mall.service;
 
-import com.yuan.mall.model.PmsBrand;
+import com.yuan.mall.entity.pms.PmsBrand;
 
 import java.util.List;
 

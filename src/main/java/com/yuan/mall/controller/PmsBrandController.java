@@ -1,8 +1,7 @@
 package com.yuan.mall.controller;
 
-import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.yuan.mall.common.CommonResult;
-import com.yuan.mall.model.PmsBrand;
+import com.yuan.mall.entity.pms.PmsBrand;
 import com.yuan.mall.service.PmsBrandService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;

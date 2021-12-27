@@ -5,7 +5,7 @@
 
 <mapper namespace="com.yuan.mall.mapper.PmsBrandMapper">
 
-    <select id="listAll" resultType="com.yuan.mall.model.PmsBrand">
+    <select id="listAll" resultType="com.yuan.mall.entity.pms.PmsBrand">
         select * from pms_brand;
     </select>
 
