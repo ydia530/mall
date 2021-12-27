@@ -1,10 +1,8 @@
 package com.yuan.mall.service.impl;
 
 import com.baomidou.mybatisplus.core.toolkit.StringUtils;
-import com.baomidou.mybatisplus.extension.api.R;
-import com.yuan.mall.common.RedisUtil;
+import com.yuan.mall.common.utils.RedisUtil;
 import com.yuan.mall.service.UmsMemberService;
-import io.netty.util.internal.StringUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;

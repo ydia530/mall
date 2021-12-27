@@ -1,9 +1,5 @@
-package com.yuan.mall.common;
+package com.yuan.mall.common.utils;
 
-/**
- * @author Yuan Diao
- * @date 2021/12/26
- */
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Component;
@@ -15,6 +11,11 @@ import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
+
+/**
+ * @author Yuan Diao
+ * @date 2021/12/26
+ */
 @Component
 public final class RedisUtil {
 
@@ -364,8 +365,9 @@ public final class RedisUtil {
     public long sSetAndTime(String key, long time, Object... values) {
         try {
             Long count = redisTemplate.opsForSet().add(key, values);
-            if (time > 0)
+            if (time > 0){
                 expire(key, time);
+            }
             return count;
         } catch (Exception e) {
             e.printStackTrace();

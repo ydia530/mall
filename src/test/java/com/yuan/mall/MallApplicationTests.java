@@ -1,11 +1,10 @@
 package com.yuan.mall;
 
 import com.alibaba.druid.pool.DruidDataSource;
-import com.yuan.mall.common.RedisUtil;
+import com.yuan.mall.common.utils.RedisUtil;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.boot.autoconfigure.data.redis.RedisProperties;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.redis.core.RedisTemplate;
 
