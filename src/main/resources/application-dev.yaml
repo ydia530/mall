@@ -44,6 +44,8 @@ redis:
       authCode: 120 #过期时间120秒
     prefix:
       authCode: "portal:authCode:"
+      resourceList: "ums:resourceList"
+      admin: 'ums:admin'
 
 
 mybatis-plus:
@@ -59,5 +61,5 @@ swagger: true
 jwt:
   tokenHeader: Authorization #JWT存储的请求头
   secret: fddc1534226xxxxxb4594dc5sd56a41s #JWT加解密使用的密钥
-  expiration: 604800 #JWT的超期限时间(60*60*24)
+  expiration: 60 #JWT的超期限时间(60*60*24)
   tokenHead: Bearer  #JWT负载中拿到开头

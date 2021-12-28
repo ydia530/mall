@@ -80,6 +80,17 @@ public final class RedisUtil {
         }
     }
 
+    /**
+     * 删除缓存
+     * @param key 可以传一个值 或多个
+     */
+    @SuppressWarnings("unchecked")
+    public void del(List<String> key) {
+        if (key != null && key.size() > 0) {
+            redisTemplate.delete((Collection<String>) CollectionUtils.arrayToList(key));
+        }
+    }
+
 
     // ============================String=============================
 
