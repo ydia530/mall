@@ -3,8 +3,11 @@ package com.yuan.mall.service.impl;
 import cn.hutool.core.collection.CollUtil;
 import com.yuan.mall.common.utils.RedisUtil;
 import com.yuan.mall.entity.ums.UmsAdmin;
+import com.yuan.mall.entity.ums.UmsAdminRoleRelation;
 import com.yuan.mall.entity.ums.UmsResource;
+import com.yuan.mall.mapper.UmsAdminRoleRelationMapper;
 import com.yuan.mall.service.UmsAdminCacheService;
+import com.yuan.mall.service.UmsAdminRoleRelationService;
 import com.yuan.mall.service.UmsAdminService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -29,7 +32,7 @@ public class UmsAdminCacheServiceImpl implements UmsAdminCacheService {
     private UmsAdminRoleRelationMapper adminRoleRelationMapper;
 
     @Autowired
-    private UmsAdminRoleRelationDao adminRoleRelationDao;
+    private UmsAdminRoleRelationService adminRoleRelationService;
 
     @Value("${redis.database}")
     private String REDIS_DATABASE;
@@ -42,11 +45,11 @@ public class UmsAdminCacheServiceImpl implements UmsAdminCacheService {
 
     @Override
     public void delAdmin(Long adminId) {
-        UmsAdmin admin = umsAdminService.getItem(adminId);
-        if (admin != null) {
-            String key = REDIS_DATABASE + ":" + REDIS_KEY_ADMIN + ":" + admin.getUsername();
-            redisUtil.del(key);
-        }
+//        UmsAdmin admin = umsAdminService.getItem(adminId);
+//        if (admin != null) {
+//            String key = REDIS_DATABASE + ":" + REDIS_KEY_ADMIN + ":" + admin.getUsername();
+//            redisUtil.del(key);
+//        }
     }
 
     @Override
@@ -57,31 +60,31 @@ public class UmsAdminCacheServiceImpl implements UmsAdminCacheService {
 
     @Override
     public void delResourceListByRole(Long roleId) {
-        UmsAdminRoleRelationExample example = new UmsAdminRoleRelationExample();
-        example.createCriteria().andRoleIdEqualTo(roleId);
-        List<UmsAdminRoleRelation> relationList = adminRoleRelationMapper.selectByExample(example);
-        if (CollUtil.isNotEmpty(relationList)) {
-            String keyPrefix = REDIS_DATABASE + ":" + REDIS_KEY_RESOURCE_LIST + ":";
-            List<String> keys = relationList.stream().map(relation -> keyPrefix + relation.getAdminId()).collect(Collectors.toList());
-            redisUtil.del(keys);
-        }
+//        UmsAdminRoleRelationExample example = new UmsAdminRoleRelationExample();
+//        example.createCriteria().andRoleIdEqualTo(roleId);
+//        List<UmsAdminRoleRelation> relationList = adminRoleRelationMapper.selectByExample(example);
+//        if (CollUtil.isNotEmpty(relationList)) {
+//            String keyPrefix = REDIS_DATABASE + ":" + REDIS_KEY_RESOURCE_LIST + ":";
+//            List<String> keys = relationList.stream().map(relation -> keyPrefix + relation.getAdminId()).collect(Collectors.toList());
+//            redisUtil.del(keys);
+//        }
     }
 
     @Override
     public void delResourceListByRoleIds(List<Long> roleIds) {
-        UmsAdminRoleRelationExample example = new UmsAdminRoleRelationExample();
-        example.createCriteria().andRoleIdIn(roleIds);
-        List<UmsAdminRoleRelation> relationList = adminRoleRelationMapper.selectByExample(example);
-        if (CollUtil.isNotEmpty(relationList)) {
-            String keyPrefix = REDIS_DATABASE + ":" + REDIS_KEY_RESOURCE_LIST + ":";
-            List<String> keys = relationList.stream().map(relation -> keyPrefix + relation.getAdminId()).collect(Collectors.toList());
-            redisService.del(keys);
-        }
+//        UmsAdminRoleRelationExample example = new UmsAdminRoleRelationExample();
+//        example.createCriteria().andRoleIdIn(roleIds);
+//        List<UmsAdminRoleRelation> relationList = adminRoleRelationMapper.selectByExample(example);
+//        if (CollUtil.isNotEmpty(relationList)) {
+//            String keyPrefix = REDIS_DATABASE + ":" + REDIS_KEY_RESOURCE_LIST + ":";
+//            List<String> keys = relationList.stream().map(relation -> keyPrefix + relation.getAdminId()).collect(Collectors.toList());
+//            redisService.del(keys);
+//        }
     }
 
     @Override
     public void delResourceListByResource(Long resourceId) {
-        List<Long> adminIdList = adminRoleRelationDao.getAdminIdList(resourceId);
+        List<Long> adminIdList = adminRoleRelationService.getAdminIdList(resourceId);
         if (CollUtil.isNotEmpty(adminIdList)) {
             String keyPrefix = REDIS_DATABASE + ":" + REDIS_KEY_RESOURCE_LIST + ":";
             List<String> keys = adminIdList.stream().map(adminId -> keyPrefix + adminId).collect(Collectors.toList());
