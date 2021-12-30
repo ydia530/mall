@@ -1,11 +1,14 @@
 package com.yuan.mall.controller;
 
+import cn.hutool.core.collection.CollUtil;
 import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import com.yuan.mall.common.CommonResult;
 import com.yuan.mall.entity.ums.UmsAdmin;
+import com.yuan.mall.entity.ums.UmsRole;
 import com.yuan.mall.pojo.dto.AdminLoginDto;
 import com.yuan.mall.pojo.dto.UmsAdminParam;
 import com.yuan.mall.service.UmsAdminService;
+import com.yuan.mall.service.UmsRoleService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
@@ -17,7 +20,9 @@ import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * 后台用户管理
@@ -29,15 +34,18 @@ import java.util.Map;
 @Api(tags = "UmsAdminController", description = "后台用户管理")
 @RequestMapping("/api/admin")
 public class UmsAdminController {
-
-    @Autowired
-    private UmsAdminService umsAdminService;
-
     @Value("${jwt.tokenHeader}")
     private String tokenHeader;
 
     @Value("${jwt.tokenHead}")
     private String tokenHead;
+
+    @Autowired
+    private UmsAdminService umsAdminService;
+
+    @Autowired
+    private UmsRoleService umsRoleService;
+
 
     @ApiOperation(value = "管理员注册")
     @PostMapping("/register")
@@ -72,7 +80,26 @@ public class UmsAdminController {
     }
 
 
-
+    @ApiOperation(value = "获取当前登录用户信息")
+    @RequestMapping(value = "/info", method = RequestMethod.GET)
+    @ResponseBody
+    public CommonResult getAdminInfo(Principal principal) {
+        if(principal==null){
+            return CommonResult.unauthorized(null);
+        }
+        String username = principal.getName();
+        UmsAdmin umsAdmin = umsAdminService.getAdminByUsername(username);
+        Map<String, Object> data = new HashMap<>();
+        data.put("username", umsAdmin.getUsername());
+        data.put("menus", umsRoleService.getMenuList(umsAdmin.getId()));
+        data.put("icon", umsAdmin.getIcon());
+        List<UmsRole> roleList = umsAdminService.getRoleList(umsAdmin.getId());
+        if(CollUtil.isNotEmpty(roleList)){
+            List<String> roles = roleList.stream().map(UmsRole::getName).collect(Collectors.toList());
+            data.put("roles",roles);
+        }
+        return CommonResult.success(data);
+    }
 
 
 }

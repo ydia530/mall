@@ -30,4 +30,6 @@ public interface UmsRoleService {
     int create(UmsRole role);
 
     int delete(List<Integer> ids);
+
+    List<String> getMenuList(Integer id);
 }

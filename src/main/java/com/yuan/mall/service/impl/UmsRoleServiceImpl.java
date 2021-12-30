@@ -63,4 +63,9 @@ public class UmsRoleServiceImpl implements UmsRoleService {
     public int delete(List<Integer> ids) {
         return 0;
     }
+
+    @Override
+    public UmsMenu getMenuList(Integer userId) {
+        return null;
+    }
 }
