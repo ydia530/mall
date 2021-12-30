@@ -5,13 +5,16 @@ import cn.hutool.core.collection.CollUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.yuan.mall.common.CommonResult;
 import com.yuan.mall.common.utils.JwtTokenUtil;
+import com.yuan.mall.common.utils.RequestUtil;
 import com.yuan.mall.entity.ums.UmsAdmin;
+import com.yuan.mall.entity.ums.UmsAdminLoginLog;
 import com.yuan.mall.entity.ums.UmsResource;
 import com.yuan.mall.entity.ums.UmsRole;
 import com.yuan.mall.mapper.UmsAdminMapper;
 import com.yuan.mall.pojo.dto.AdminUserDetails;
 import com.yuan.mall.pojo.dto.UmsAdminParam;
 import com.yuan.mall.pojo.dto.UpdateAdminPasswordParam;
+import com.yuan.mall.service.UmsAdminCacheService;
 import com.yuan.mall.service.UmsAdminRoleRelationService;
 import com.yuan.mall.service.UmsAdminService;
 import com.yuan.mall.service.UmsResourceService;
@@ -27,7 +30,12 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 
+import javax.servlet.http.HttpServletRequest;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
@@ -46,9 +54,8 @@ public class UmsAdminServiceImpl implements UmsAdminService {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
-
     @Autowired
-    private UserDetailsService userDetailsService;
+    private UmsAdminCacheService umsAdminCacheService;
 
     @Autowired
     private JwtTokenUtil jwtTokenUtil;
@@ -58,10 +65,21 @@ public class UmsAdminServiceImpl implements UmsAdminService {
 
     @Override
     public UmsAdmin getAdminByUsername(String username) {
+        UmsAdmin admin = umsAdminCacheService.getAdmin(username);
+        if (admin != null) {
+            log.info("缓存命中：" +username);
+            return admin;
+        }
         QueryWrapper queryWrapper = new QueryWrapper();
         queryWrapper.eq("username", username);
         queryWrapper.eq("status", 1);
-        return umsAdminMapper.selectOne(queryWrapper);
+
+        admin = umsAdminMapper.selectOne(queryWrapper);
+        if (admin != null){
+            log.info("redis新增admin：" + username);
+            umsAdminCacheService.setAdmin(admin);
+        }
+        return admin;
     }
 
     @Override
@@ -92,10 +110,27 @@ public class UmsAdminServiceImpl implements UmsAdminService {
             UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
             SecurityContextHolder.getContext().setAuthentication(authentication);
             token = jwtTokenUtil.generateToken(userDetails);
-        } catch (AuthenticationException e) {
+            addLoginLog(username);
+        } catch (Exception e) {
             log.warn("登录异常:{}", e.getMessage());
         }
         return token;
+    }
+
+    private void addLoginLog(String username) throws ParseException {
+        UmsAdmin admin = getAdminByUsername(username);
+        if(admin==null) {
+            return;
+        }
+        UmsAdminLoginLog loginLog = new UmsAdminLoginLog();
+        loginLog.setAdminId(admin.getId());
+
+        ServletRequestAttributes attributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
+        HttpServletRequest request = attributes.getRequest();
+        loginLog.setIp(RequestUtil.getRequestIp(request));
+        loginLog.setAddress("1");
+        loginLog.setUserAgent("1");
+        umsAdminMapper.addLoginLog(loginLog);
     }
 
     @Override
@@ -135,14 +170,15 @@ public class UmsAdminServiceImpl implements UmsAdminService {
 
     @Override
     public List<UmsResource> getResourceList(Integer adminId) {
-//        List<UmsResource> resourceList = adminCacheService.getResourceList(adminId);
-//        if(CollUtil.isNotEmpty(resourceList)){
-//            return  resourceList;
-//        }
-        List<UmsResource> resourceList = roleRelationService.getResourceList(adminId);
-//        if(CollUtil.isNotEmpty(resourceList)){
-//            adminCacheService.setResourceList(adminId,resourceList);
-//        }
+        List<UmsResource> resourceList = umsAdminCacheService.getResourceList(adminId);
+        if(CollUtil.isNotEmpty(resourceList)){
+            log.info("缓存命中 admin: "+ adminId);
+            return  resourceList;
+        }
+        resourceList = roleRelationService.getResourceList(adminId);
+        if(CollUtil.isNotEmpty(resourceList)){
+            umsAdminCacheService.setResourceList(adminId,resourceList);
+        }
         return resourceList;
     }
     @Override
