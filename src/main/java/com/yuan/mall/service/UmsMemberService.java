@@ -6,7 +6,7 @@ import org.springframework.stereotype.Service;
  * @author Yuan Diao
  * @date 2021/12/26
  */
-@Service
+
 public interface UmsMemberService {
 
     /**

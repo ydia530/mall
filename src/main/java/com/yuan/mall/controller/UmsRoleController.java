@@ -1,6 +1,7 @@
 package com.yuan.mall.controller;
 
 import com.yuan.mall.common.CommonResult;
+import com.yuan.mall.entity.ums.UmsMenu;
 import com.yuan.mall.entity.ums.UmsResource;
 import com.yuan.mall.entity.ums.UmsRole;
 import com.yuan.mall.service.UmsRoleService;

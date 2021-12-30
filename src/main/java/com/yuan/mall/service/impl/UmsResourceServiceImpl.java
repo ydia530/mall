@@ -1,7 +1,10 @@
 package com.yuan.mall.service.impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.yuan.mall.entity.ums.UmsResource;
+import com.yuan.mall.mapper.UmsResourceMapper;
 import com.yuan.mall.service.UmsResourceService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -12,6 +15,10 @@ import java.util.List;
  */
 @Service
 public class UmsResourceServiceImpl implements UmsResourceService {
+
+    @Autowired
+    private UmsResourceMapper umsResourceMapper;
+
     @Override
     public int create(UmsResource umsResource) {
         return 0;
@@ -39,6 +46,6 @@ public class UmsResourceServiceImpl implements UmsResourceService {
 
     @Override
     public List<UmsResource> listAll() {
-        return null;
+        return umsResourceMapper.selectList(new QueryWrapper<>());
     }
 }

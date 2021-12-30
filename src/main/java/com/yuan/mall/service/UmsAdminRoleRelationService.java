@@ -13,7 +13,7 @@ import java.util.List;
 /**
  * @author diaoyuan
  */
-@Service
+
 public interface UmsAdminRoleRelationService {
     /**
      * 批量插入用户角色关系

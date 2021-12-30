@@ -12,7 +12,7 @@ import java.util.List;
  * @author Yuan Diao
  * @date 2021/12/28
  */
-@Service
+
 public interface UmsResourceService {
     int create(UmsResource umsResource);
 

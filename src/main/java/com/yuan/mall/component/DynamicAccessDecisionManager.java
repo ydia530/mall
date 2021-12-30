@@ -1,9 +1,6 @@
 package com.yuan.mall.component;
 
-/**
- * @author Yuan Diao
- * @date 2021/12/28
- */
+import cn.hutool.core.collection.CollUtil;
 import org.springframework.security.access.AccessDecisionManager;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.access.ConfigAttribute;
@@ -16,8 +13,7 @@ import java.util.Iterator;
 
 /**
  * 动态权限决策管理器，用于判断用户是否有访问权限
- *
- * @author Diaoyuan
+ * @author diaoyuan
  */
 public class DynamicAccessDecisionManager implements AccessDecisionManager {
 
@@ -25,7 +21,7 @@ public class DynamicAccessDecisionManager implements AccessDecisionManager {
     public void decide(Authentication authentication, Object object,
                        Collection<ConfigAttribute> configAttributes) throws AccessDeniedException, InsufficientAuthenticationException {
         // 当接口未被配置资源时直接放行
-        if (configAttributes.isEmpty()) {
+        if (CollUtil.isEmpty(configAttributes)) {
             return;
         }
         Iterator<ConfigAttribute> iterator = configAttributes.iterator();

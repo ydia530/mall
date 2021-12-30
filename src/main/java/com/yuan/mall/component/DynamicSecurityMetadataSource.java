@@ -1,5 +1,6 @@
 package com.yuan.mall.component;
 
+
 import cn.hutool.core.util.URLUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.ConfigAttribute;
@@ -7,16 +8,19 @@ import org.springframework.security.web.FilterInvocation;
 import org.springframework.security.web.access.intercept.FilterInvocationSecurityMetadataSource;
 import org.springframework.util.AntPathMatcher;
 import org.springframework.util.PathMatcher;
+
 import javax.annotation.PostConstruct;
 import java.util.*;
 
 /**
  * 动态权限数据源，用于获取动态权限规则
- * @author Yuan Diao
+ *
+ * @author Diaoyuan
  */
 public class DynamicSecurityMetadataSource implements FilterInvocationSecurityMetadataSource {
 
     private static Map<String, ConfigAttribute> configAttributeMap = null;
+
     @Autowired
     private DynamicSecurityService dynamicSecurityService;
 
@@ -32,9 +36,7 @@ public class DynamicSecurityMetadataSource implements FilterInvocationSecurityMe
 
     @Override
     public Collection<ConfigAttribute> getAttributes(Object o) throws IllegalArgumentException {
-        if (configAttributeMap == null) {
-            this.loadDataSource();
-        }
+        if (configAttributeMap == null) this.loadDataSource();
         List<ConfigAttribute>  configAttributes = new ArrayList<>();
         //获取当前访问的路径
         String url = ((FilterInvocation) o).getRequestUrl();

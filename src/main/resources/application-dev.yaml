@@ -38,21 +38,45 @@ spring:
     port: 6379
     password: Diao0707
 
-redis:
-  key:
-    expire:
-      authCode: 120 #过期时间120秒
-    prefix:
-      authCode: "portal:authCode:"
-      resourceList: "ums:resourceList"
-      admin: 'ums:admin'
+  main:
+    allow-circular-references: true
 
+redis:
+  database: mall
+  key:
+    admin: 'ums:admin'
+    resourceList: 'ums:resourceList'
+    member:
+      authCode: "ums:member:authCode"
+  expire:
+    common: 86400 # 24小时
+    authCode: 120
+
+secure:
+  ignored:
+    urls: #安全路径白名单
+      - /swagger-ui.html
+      - /swagger-resources/**
+      - /swagger/**
+      - /**/v2/api-docs
+      - /**/*.js
+      - /**/*.css
+      - /**/*.png
+      - /**/*.ico
+      - /webjars/springfox-swagger-ui/**
+      - /actuator/**
+      - /druid/**
+      - /admin/login
+      - /admin/register
+      - /admin/info
+      - /admin/logout
+      - /minio/upload
 
 mybatis-plus:
+  configuration:
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
   mapper-locations: classpath:mapper/*.xml
-
-mybatis-plus.configuration.log-impl:
-  org.apache.ibatis.logging.stdout.StdOutImpl
+  type-aliases-package: com.yuan.mall.entity
 
 swagger: true
 

@@ -19,10 +19,10 @@ public class UmsMemberServiceImpl implements UmsMemberService {
     @Autowired
     private RedisUtil redisUtil;
 
-    @Value("${redis.key.prefix.authCode}")
+    @Value("${redis.key.member.authCode}")
     private String REDIS_KEY_PREFIX_AUTH_CODE;
 
-    @Value("${redis.key.expire.authCode}")
+    @Value("${redis.expire.authCode}")
     private Long AUTH_CODE_EXPIRE_SECONDS;
 
 

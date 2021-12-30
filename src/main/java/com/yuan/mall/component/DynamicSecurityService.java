@@ -1,12 +1,13 @@
 package com.yuan.mall.component;
 
+
 import org.springframework.security.access.ConfigAttribute;
 
 import java.util.Map;
 
 /**
  * 动态权限相关业务类
- * @author Diaoyuan
+ * @author diaoyuan
  */
 public interface DynamicSecurityService {
     /**

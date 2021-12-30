@@ -91,4 +91,9 @@ public class UmsAdminServiceImpl implements UmsAdminService {
         List<UmsPermission> permissions = umsAdminMapper.getPermissionList(adminId);
         return permissions;
     }
+
+    @Override
+    public UserDetails loadUserByUsername(String username) {
+        return null;
+    }
 }
