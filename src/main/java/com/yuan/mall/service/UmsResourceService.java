@@ -25,4 +25,6 @@ public interface UmsResourceService {
     List<UmsResource> list(Long categoryId, String nameKeyword, String urlKeyword, Integer pageSize, Integer pageNum);
 
     List<UmsResource> listAll();
+
+    List<UmsResource> getListByIds(List<Integer> roleId);
 }

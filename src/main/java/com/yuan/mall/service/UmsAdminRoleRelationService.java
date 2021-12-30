@@ -23,15 +23,15 @@ public interface UmsAdminRoleRelationService {
     /**
      * 获取用于所有角色
      */
-    List<UmsRole> getRoleList(@Param("adminId") Long adminId);
+    List<UmsRole> getRoleList(@Param("adminId") Integer adminId);
 
     /**
      * 获取用户所有可访问资源
      */
-    List<UmsResource> getResourceList(@Param("adminId") Long adminId);
+    List<UmsResource> getResourceList(@Param("adminId") Integer adminId);
 
     /**
      * 获取资源相关用户ID列表
      */
-    List<Long> getAdminIdList(@Param("resourceId") Long resourceId);
+    List<Integer> getAdminIdList(@Param("resourceId") Integer resourceId);
 }

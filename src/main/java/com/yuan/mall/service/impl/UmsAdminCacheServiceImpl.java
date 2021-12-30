@@ -44,7 +44,7 @@ public class UmsAdminCacheServiceImpl implements UmsAdminCacheService {
     private String REDIS_KEY_RESOURCE_LIST;
 
     @Override
-    public void delAdmin(Long adminId) {
+    public void delAdmin(Integer adminId) {
 //        UmsAdmin admin = umsAdminService.getItem(adminId);
 //        if (admin != null) {
 //            String key = REDIS_DATABASE + ":" + REDIS_KEY_ADMIN + ":" + admin.getUsername();
@@ -53,13 +53,13 @@ public class UmsAdminCacheServiceImpl implements UmsAdminCacheService {
     }
 
     @Override
-    public void delResourceList(Long adminId) {
+    public void delResourceList(Integer adminId) {
         String key = REDIS_DATABASE + ":" + REDIS_KEY_RESOURCE_LIST + ":" + adminId;
         redisUtil.del(key);
     }
 
     @Override
-    public void delResourceListByRole(Long roleId) {
+    public void delResourceListByRole(Integer roleId) {
 //        UmsAdminRoleRelationExample example = new UmsAdminRoleRelationExample();
 //        example.createCriteria().andRoleIdEqualTo(roleId);
 //        List<UmsAdminRoleRelation> relationList = adminRoleRelationMapper.selectByExample(example);
@@ -71,7 +71,7 @@ public class UmsAdminCacheServiceImpl implements UmsAdminCacheService {
     }
 
     @Override
-    public void delResourceListByRoleIds(List<Long> roleIds) {
+    public void delResourceListByRoleIds(List<Integer> roleIds) {
 //        UmsAdminRoleRelationExample example = new UmsAdminRoleRelationExample();
 //        example.createCriteria().andRoleIdIn(roleIds);
 //        List<UmsAdminRoleRelation> relationList = adminRoleRelationMapper.selectByExample(example);
@@ -83,8 +83,8 @@ public class UmsAdminCacheServiceImpl implements UmsAdminCacheService {
     }
 
     @Override
-    public void delResourceListByResource(Long resourceId) {
-        List<Long> adminIdList = adminRoleRelationService.getAdminIdList(resourceId);
+    public void delResourceListByResource(Integer resourceId) {
+        List<Integer> adminIdList = adminRoleRelationService.getAdminIdList(resourceId);
         if (CollUtil.isNotEmpty(adminIdList)) {
             String keyPrefix = REDIS_DATABASE + ":" + REDIS_KEY_RESOURCE_LIST + ":";
             List<String> keys = adminIdList.stream().map(adminId -> keyPrefix + adminId).collect(Collectors.toList());
@@ -105,13 +105,13 @@ public class UmsAdminCacheServiceImpl implements UmsAdminCacheService {
     }
 
     @Override
-    public List<UmsResource> getResourceList(Long adminId) {
+    public List<UmsResource> getResourceList(Integer adminId) {
         String key = REDIS_DATABASE + ":" + REDIS_KEY_RESOURCE_LIST + ":" + adminId;
         return (List<UmsResource>) redisUtil.get(key);
     }
 
     @Override
-    public void setResourceList(Long adminId, List<UmsResource> resourceList) {
+    public void setResourceList(Integer adminId, List<UmsResource> resourceList) {
         String key = REDIS_DATABASE + ":" + REDIS_KEY_RESOURCE_LIST + ":" + adminId;
         redisUtil.set(key, resourceList, REDIS_EXPIRE);
     }

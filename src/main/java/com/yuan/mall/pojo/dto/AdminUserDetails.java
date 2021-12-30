@@ -2,6 +2,7 @@ package com.yuan.mall.pojo.dto;
 
 import com.yuan.mall.entity.ums.UmsAdmin;
 import com.yuan.mall.entity.ums.UmsPermission;
+import com.yuan.mall.entity.ums.UmsResource;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -14,23 +15,24 @@ import java.util.stream.Collectors;
  * @author diaoyuan
  */
 public class AdminUserDetails implements UserDetails {
+    //后台用户
     private UmsAdmin umsAdmin;
-    private List<UmsPermission> permissionList;
-    public AdminUserDetails(UmsAdmin umsAdmin, List<UmsPermission> permissionList) {
+    //拥有资源列表
+    private List<UmsResource> resourceList;
+    public AdminUserDetails(UmsAdmin umsAdmin,List<UmsResource> resourceList) {
         this.umsAdmin = umsAdmin;
-        this.permissionList = permissionList;
+        this.resourceList = resourceList;
     }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        if (permissionList != null){
-            //返回当前用户的权限
-            return permissionList.stream()
-                    .filter(permission -> permission.getValue()!=null)
-                    .map(permission ->new SimpleGrantedAuthority(permission.getValue()))
-                    .collect(Collectors.toList());
+        //返回当前用户的角色
+        if (resourceList != null){
+
         }
-        return null;
+        return resourceList.stream()
+                .map(role ->new SimpleGrantedAuthority(role.getId()+":"+role.getName()))
+                .collect(Collectors.toList());
     }
 
     @Override

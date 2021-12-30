@@ -48,4 +48,9 @@ public class UmsResourceServiceImpl implements UmsResourceService {
     public List<UmsResource> listAll() {
         return umsResourceMapper.selectList(new QueryWrapper<>());
     }
+
+    @Override
+    public List<UmsResource> getListByIds(List<Integer> ids){
+        return umsResourceMapper.selectBatchIds(ids);
+    }
 }

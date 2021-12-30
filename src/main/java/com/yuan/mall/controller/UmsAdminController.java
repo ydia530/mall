@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import com.yuan.mall.common.CommonResult;
 import com.yuan.mall.entity.ums.UmsAdmin;
 import com.yuan.mall.pojo.dto.AdminLoginDto;
+import com.yuan.mall.pojo.dto.UmsAdminParam;
 import com.yuan.mall.service.UmsAdminService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -42,7 +43,7 @@ public class UmsAdminController {
     @ApiOperation(value = "管理员注册")
     @PostMapping("/register")
     @ResponseBody
-    public CommonResult register(@Validated @RequestBody UmsAdmin umsAdminParam, BindingResult result) {
+    public CommonResult register(@Validated @RequestBody UmsAdminParam umsAdminParam, BindingResult result) {
         if (result.hasErrors()) {
             return CommonResult.failed(result.getFieldError().getDefaultMessage());
         }

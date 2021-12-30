@@ -30,7 +30,6 @@ public class PmsBrandController {
 
     @ApiOperation("获取所有品牌列表")
     @GetMapping("/listAll")
-    @PreAuthorize("hasAuthority('pms:brand:read')")
     public CommonResult<List<PmsBrand>> getAllPmsBrand(){
         return CommonResult.success(pmsBrandService.listAllBrand());
     }

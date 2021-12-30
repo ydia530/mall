@@ -66,11 +66,11 @@ secure:
       - /webjars/springfox-swagger-ui/**
       - /actuator/**
       - /druid/**
-      - /admin/login
-      - /admin/register
-      - /admin/info
-      - /admin/logout
-      - /minio/upload
+      - /api/admin/login
+      - /api/admin/register
+      - /api/admin/info
+      - /api/admin/logout
+      - /api/minio/upload
 
 mybatis-plus:
   configuration:

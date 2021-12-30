@@ -13,15 +13,15 @@ import java.util.List;
  */
 
 public interface UmsRoleService {
-    List<UmsMenu> listMenu(Long roleId);
+    List<UmsMenu> listMenu(Integer roleId);
 
-    List<UmsResource> listResource(Long roleId);
+    List<UmsResource> listResource(Integer roleId);
 
-    int allocMenu(Long roleId, List<Long> menuIds);
+    int allocMenu(Integer roleId, List<Integer> menuIds);
 
-    int allocResource(Long roleId, List<Long> resourceIds);
+    int allocResource(Integer roleId, List<Integer> resourceIds);
 
-    int update(Long id, UmsRole umsRole);
+    int update(Integer id, UmsRole umsRole);
 
     List<UmsRole> list(String keyword, Integer pageSize, Integer pageNum);
 
@@ -29,5 +29,5 @@ public interface UmsRoleService {
 
     int create(UmsRole role);
 
-    int delete(List<Long> ids);
+    int delete(List<Integer> ids);
 }

@@ -15,31 +15,31 @@ public interface UmsAdminCacheService {
      * @param adminId
      * 删除后台用户缓存
      */
-    void delAdmin(Long adminId);
+    void delAdmin(Integer adminId);
 
     /**
      * @param adminId
      * 删除后台用户资源列表缓存
      */
-    void delResourceList(Long adminId);
+    void delResourceList(Integer adminId);
 
     /**
      * @param roleId
      * 当角色相关资源信息改变时删除相关后台用户缓存
      */
-    void delResourceListByRole(Long roleId);
+    void delResourceListByRole(Integer roleId);
 
     /**
      * @param roleIds
      * 当角色相关资源信息改变时删除相关后台用户缓存
      */
-    void delResourceListByRoleIds(List<Long> roleIds);
+    void delResourceListByRoleIds(List<Integer> roleIds);
 
     /**
      * @param resourceId
      * 当资源信息改变时，删除资源项目后台用户缓存
      */
-    void delResourceListByResource(Long resourceId);
+    void delResourceListByResource(Integer resourceId);
 
     /**
      * @param username
@@ -57,11 +57,11 @@ public interface UmsAdminCacheService {
      * @param adminId
      * 获取缓存后台用户资源列表
      */
-    List<UmsResource> getResourceList(Long adminId);
+    List<UmsResource> getResourceList(Integer adminId);
 
     /**
      * @param resourceList
      * 设置缓存后台用户资源列表
      */
-    void setResourceList(Long adminId, List<UmsResource> resourceList);
+    void setResourceList(Integer adminId, List<UmsResource> resourceList);
 }

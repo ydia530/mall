@@ -1,23 +1,30 @@
 package com.yuan.mall.service.impl;
 
 
+import cn.hutool.core.collection.CollUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.yuan.mall.common.CommonResult;
 import com.yuan.mall.common.utils.JwtTokenUtil;
 import com.yuan.mall.entity.ums.UmsAdmin;
-import com.yuan.mall.entity.ums.UmsPermission;
+import com.yuan.mall.entity.ums.UmsResource;
+import com.yuan.mall.entity.ums.UmsRole;
 import com.yuan.mall.mapper.UmsAdminMapper;
+import com.yuan.mall.pojo.dto.AdminUserDetails;
+import com.yuan.mall.pojo.dto.UmsAdminParam;
+import com.yuan.mall.pojo.dto.UpdateAdminPasswordParam;
+import com.yuan.mall.service.UmsAdminRoleRelationService;
 import com.yuan.mall.service.UmsAdminService;
+import com.yuan.mall.service.UmsResourceService;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.context.annotation.Lazy;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -35,16 +42,19 @@ public class UmsAdminServiceImpl implements UmsAdminService {
     @Autowired
     private UmsAdminMapper umsAdminMapper;
 
-    @Lazy
+
     @Autowired
     private PasswordEncoder passwordEncoder;
 
-    @Lazy
+
     @Autowired
     private UserDetailsService userDetailsService;
 
     @Autowired
     private JwtTokenUtil jwtTokenUtil;
+
+    @Autowired
+    private UmsAdminRoleRelationService roleRelationService;
 
     @Override
     public UmsAdmin getAdminByUsername(String username) {
@@ -55,7 +65,7 @@ public class UmsAdminServiceImpl implements UmsAdminService {
     }
 
     @Override
-    public CommonResult register(UmsAdmin umsAdminParam) {
+    public CommonResult register(UmsAdminParam umsAdminParam) {
         QueryWrapper queryWrapper = new QueryWrapper();
         queryWrapper.eq("username", umsAdminParam.getUsername());
         queryWrapper.eq("status", 1);
@@ -63,9 +73,11 @@ public class UmsAdminServiceImpl implements UmsAdminService {
         if (umsAdmin != null){
             return CommonResult.failed("用户名重复");
         }
-        umsAdminParam.setCreateTime(new Date());
-        umsAdminParam.setPassword(passwordEncoder.encode(umsAdminParam.getPassword()));
-        umsAdminMapper.insert(umsAdminParam);
+        UmsAdmin newAdmin = new UmsAdmin();
+        BeanUtils.copyProperties(umsAdminParam, newAdmin);
+        newAdmin.setCreateTime(new Date());
+        newAdmin.setPassword(passwordEncoder.encode(umsAdminParam.getPassword()));
+        umsAdminMapper.insert(newAdmin);
         return CommonResult.success("注册成功");
     }
 
@@ -73,7 +85,7 @@ public class UmsAdminServiceImpl implements UmsAdminService {
     public String login(String username, String password) {
         String token = null;
         try {
-            UserDetails userDetails = userDetailsService.loadUserByUsername(username);
+            UserDetails userDetails = loadUserByUsername(username);
             if (!passwordEncoder.matches(password, userDetails.getPassword())) {
                 throw new BadCredentialsException("密码不正确");
             }
@@ -87,13 +99,66 @@ public class UmsAdminServiceImpl implements UmsAdminService {
     }
 
     @Override
-    public List<UmsPermission> getPermissionList(Integer adminId) {
-        List<UmsPermission> permissions = umsAdminMapper.getPermissionList(adminId);
-        return permissions;
+    public String refreshToken(String oldToken) {
+        return null;
+    }
+
+    @Override
+    public UmsAdmin getItem(Integer id) {
+        return null;
+    }
+
+    @Override
+    public List<UmsAdmin> list(String keyword, Integer pageSize, Integer pageNum) {
+        return null;
+    }
+
+    @Override
+    public int update(Integer id, UmsAdmin admin) {
+        return 0;
+    }
+
+    @Override
+    public int delete(Integer id) {
+        return 0;
+    }
+
+    @Override
+    public int updateRole(Integer adminId, List<Long> roleIds) {
+        return 0;
+    }
+
+    @Override
+    public List<UmsRole> getRoleList(Integer adminId) {
+        return null;
+    }
+
+    @Override
+    public List<UmsResource> getResourceList(Integer adminId) {
+//        List<UmsResource> resourceList = adminCacheService.getResourceList(adminId);
+//        if(CollUtil.isNotEmpty(resourceList)){
+//            return  resourceList;
+//        }
+        List<UmsResource> resourceList = roleRelationService.getResourceList(adminId);
+//        if(CollUtil.isNotEmpty(resourceList)){
+//            adminCacheService.setResourceList(adminId,resourceList);
+//        }
+        return resourceList;
+    }
+    @Override
+    public int updatePassword(UpdateAdminPasswordParam updatePasswordParam) {
+        return 0;
     }
 
     @Override
     public UserDetails loadUserByUsername(String username) {
-        return null;
+        //获取用户信息
+        UmsAdmin admin = getAdminByUsername(username);
+        if (admin != null) {
+            List<UmsResource> resourceList = getResourceList(admin.getId());
+            return new AdminUserDetails(admin,resourceList);
+        }
+        throw new UsernameNotFoundException("用户名或密码错误");
     }
+
 }

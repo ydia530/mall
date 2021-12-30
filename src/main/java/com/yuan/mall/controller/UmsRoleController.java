@@ -38,7 +38,7 @@ public class UmsRoleController {
     @ApiOperation("修改角色")
     @PutMapping(value = "/{id}")
     @ResponseBody
-    public CommonResult update(@PathVariable Long id, @RequestBody UmsRole role) {
+    public CommonResult update(@PathVariable Integer id, @RequestBody UmsRole role) {
         int count = umsRoleService.update(id, role);
         if (count > 0) {
             return CommonResult.success(count);
@@ -49,7 +49,7 @@ public class UmsRoleController {
     @ApiOperation("批量删除角色")
     @DeleteMapping(value = "/")
     @ResponseBody
-    public CommonResult delete(@RequestParam("ids") List<Long> ids) {
+    public CommonResult delete(@RequestParam("ids") List<Integer> ids) {
         int count = umsRoleService.delete(ids);
         if (count > 0) {
             return CommonResult.success(count);
@@ -78,7 +78,7 @@ public class UmsRoleController {
     @ApiOperation("修改角色状态")
     @PostMapping(value = "/updateStatus/{id}")
     @ResponseBody
-    public CommonResult updateStatus(@PathVariable Long id, @RequestParam(value = "status") Integer status) {
+    public CommonResult updateStatus(@PathVariable Integer id, @RequestParam(value = "status") Integer status) {
         UmsRole umsRole = new UmsRole();
         umsRole.setStatus(status);
         int count = umsRoleService.update(id, umsRole);
@@ -91,7 +91,7 @@ public class UmsRoleController {
     @ApiOperation("获取角色相关菜单")
     @GetMapping(value = "/listMenu/{roleId}")
     @ResponseBody
-    public CommonResult<List<UmsMenu>> listMenu(@PathVariable Long roleId) {
+    public CommonResult<List<UmsMenu>> listMenu(@PathVariable Integer roleId) {
         List<UmsMenu> roleList = umsRoleService.listMenu(roleId);
         return CommonResult.success(roleList);
     }
@@ -99,7 +99,7 @@ public class UmsRoleController {
     @ApiOperation("获取角色相关资源")
     @GetMapping(value = "/listResource/{roleId}")
     @ResponseBody
-    public CommonResult<List<UmsResource>> listResource(@PathVariable Long roleId) {
+    public CommonResult<List<UmsResource>> listResource(@PathVariable Integer roleId) {
         List<UmsResource> roleList = umsRoleService.listResource(roleId);
         return CommonResult.success(roleList);
     }
@@ -107,7 +107,7 @@ public class UmsRoleController {
     @ApiOperation("给角色分配菜单")
     @PostMapping(value = "/allocMenu")
     @ResponseBody
-    public CommonResult allocMenu(@RequestParam Long roleId, @RequestParam List<Long> menuIds) {
+    public CommonResult allocMenu(@RequestParam Integer roleId, @RequestParam List<Integer> menuIds) {
         int count = umsRoleService.allocMenu(roleId, menuIds);
         return CommonResult.success(count);
     }
@@ -115,7 +115,7 @@ public class UmsRoleController {
     @ApiOperation("给角色分配资源")
     @PostMapping(value = "/allocResource")
     @ResponseBody
-    public CommonResult allocResource(@RequestParam Long roleId, @RequestParam List<Long> resourceIds) {
+    public CommonResult allocResource(@RequestParam Integer roleId, @RequestParam List<Integer> resourceIds) {
         int count = umsRoleService.allocResource(roleId, resourceIds);
         return CommonResult.success(count);
     }
