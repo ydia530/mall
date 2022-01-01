@@ -28,6 +28,7 @@ import java.util.stream.Collectors;
  * 后台用户管理
  * @author diaoyuan
  */
+@CrossOrigin
 @RestController
 @Slf4j
 @Validated
@@ -85,6 +86,7 @@ public class UmsAdminController {
     @ResponseBody
     public CommonResult getAdminInfo(Principal principal) {
         if(principal==null){
+            System.out.println();
             return CommonResult.unauthorized(null);
         }
         String username = principal.getName();

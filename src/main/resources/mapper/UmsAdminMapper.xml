@@ -8,11 +8,14 @@
         value ( ${adminId}, now(), "${ip}", ${address}, ${userAgent})
     </insert>
 
-
-    <select id="getPermissionList" resultType="com.yuan.mall.entity.ums.UmsPermission">
-        select b.id, b.name, b.value, b.icon, b.type, b.uri, b.status
-        from ums_admin_permission_relation a join ums_permission b on a.permission_id = b.id
-        where admin_id = ${adminId}
+    <select id="selectRolesById" resultType="com.yuan.mall.entity.ums.UmsRole">
+        SELECT
+            b.*
+        FROM
+            ums_admin_role_relation a
+                LEFT JOIN ums_role b ON a.role_id = b.id
+        WHERE
+            a.admin_id = 10
     </select>
 
 </mapper>

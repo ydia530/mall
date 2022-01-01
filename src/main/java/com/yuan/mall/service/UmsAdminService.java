@@ -74,11 +74,6 @@ public interface UmsAdminService {
     List<UmsRole> getRoleList(Integer adminId);
 
     /**
-     * 获取指定用户的可访问资源
-     */
-    List<UmsResource> getResourceList(Integer adminId);
-
-    /**
      * 修改密码
      */
     int updatePassword(UpdateAdminPasswordParam updatePasswordParam);

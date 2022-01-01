@@ -13,6 +13,7 @@ import org.springframework.util.PathMatcher;
 
 import javax.servlet.*;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 /**
@@ -75,6 +76,18 @@ public class DynamicSecurityFilter extends AbstractSecurityInterceptor implement
     @Override
     public SecurityMetadataSource obtainSecurityMetadataSource() {
         return dynamicSecurityMetadataSource;
+    }
+
+    protected void allowCrossAccess(HttpServletRequest request,HttpServletResponse response) {
+        String allowOrigin = "*";
+//		String allowOrigin = request.getHeader("Origin");
+        String allowMethods = "GET,PUT,OPTIONS,POST,DELETE";
+        String allowHeaders = "authorization,Origin,No-Cache, X-Requested-With, If-Modified-Since, Pragma, Last-Modified,Cache-Control, Expires, Content-Type, X-E4M-With";
+        response.addHeader("Access-Control-Allow-Credentials", "true");
+        response.addHeader("Access-Control-Allow-Headers", allowHeaders);
+        response.addHeader("Access-Control-Allow-Methods", allowMethods);
+        response.addHeader("Access-Control-Allow-Origin", allowOrigin);
+        response.addHeader("Access-Control-Max-Age", "1800");//30 min
     }
 
 }

@@ -32,4 +32,6 @@ public interface UmsRoleService {
     int delete(List<Integer> ids);
 
     List<String> getMenuList(Integer id);
+
+    List<UmsResource> loadAdminResource(Integer id);
 }

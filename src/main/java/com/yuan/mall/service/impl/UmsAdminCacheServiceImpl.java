@@ -28,12 +28,6 @@ public class UmsAdminCacheServiceImpl implements UmsAdminCacheService {
     @Autowired
     private RedisUtil redisUtil;
 
-    @Autowired
-    private UmsAdminRoleRelationMapper adminRoleRelationMapper;
-
-    @Autowired
-    private UmsAdminRoleRelationService adminRoleRelationService;
-
     @Value("${redis.database}")
     private String REDIS_DATABASE;
     @Value("${redis.expire.common}")
@@ -84,12 +78,12 @@ public class UmsAdminCacheServiceImpl implements UmsAdminCacheService {
 
     @Override
     public void delResourceListByResource(Integer resourceId) {
-        List<Integer> adminIdList = adminRoleRelationService.getAdminIdList(resourceId);
-        if (CollUtil.isNotEmpty(adminIdList)) {
-            String keyPrefix = REDIS_DATABASE + ":" + REDIS_KEY_RESOURCE_LIST + ":";
-            List<String> keys = adminIdList.stream().map(adminId -> keyPrefix + adminId).collect(Collectors.toList());
-            redisUtil.del(keys);
-        }
+//        List<Integer> adminIdList = adminRoleRelationService.getAdminIdList(resourceId);
+//        if (CollUtil.isNotEmpty(adminIdList)) {
+//            String keyPrefix = REDIS_DATABASE + ":" + REDIS_KEY_RESOURCE_LIST + ":";
+//            List<String> keys = adminIdList.stream().map(adminId -> keyPrefix + adminId).collect(Collectors.toList());
+//            redisUtil.del(keys);
+//        }
     }
 
     @Override

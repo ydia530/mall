@@ -13,5 +13,9 @@ import java.util.List;
  */
 @Mapper
 public interface UmsRoleMapper extends BaseMapper<UmsRole> {
-    List<UmsResource> getResourcesById(@Param("roleId") Integer roleId);
+    List<UmsResource> getResourcesByRoleId(@Param("roleId") Integer roleId);
+
+    List<UmsResource> getResourcesByAdminId(@Param("adminId") Integer adminId);
+
+    List<String> getMenuList(@Param("adminId") Integer adminId);
 }

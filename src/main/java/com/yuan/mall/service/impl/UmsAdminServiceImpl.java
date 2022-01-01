@@ -14,10 +14,7 @@ import com.yuan.mall.mapper.UmsAdminMapper;
 import com.yuan.mall.pojo.dto.AdminUserDetails;
 import com.yuan.mall.pojo.dto.UmsAdminParam;
 import com.yuan.mall.pojo.dto.UpdateAdminPasswordParam;
-import com.yuan.mall.service.UmsAdminCacheService;
-import com.yuan.mall.service.UmsAdminRoleRelationService;
-import com.yuan.mall.service.UmsAdminService;
-import com.yuan.mall.service.UmsResourceService;
+import com.yuan.mall.service.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -61,7 +58,7 @@ public class UmsAdminServiceImpl implements UmsAdminService {
     private JwtTokenUtil jwtTokenUtil;
 
     @Autowired
-    private UmsAdminRoleRelationService roleRelationService;
+    private UmsRoleService umsRoleService;
 
     @Override
     public UmsAdmin getAdminByUsername(String username) {
@@ -165,22 +162,9 @@ public class UmsAdminServiceImpl implements UmsAdminService {
 
     @Override
     public List<UmsRole> getRoleList(Integer adminId) {
-        return null;
+        return umsAdminMapper.selectRolesById(adminId);
     }
 
-    @Override
-    public List<UmsResource> getResourceList(Integer adminId) {
-        List<UmsResource> resourceList = umsAdminCacheService.getResourceList(adminId);
-        if(CollUtil.isNotEmpty(resourceList)){
-            log.info("缓存命中 admin: "+ adminId);
-            return  resourceList;
-        }
-        resourceList = roleRelationService.getResourceList(adminId);
-        if(CollUtil.isNotEmpty(resourceList)){
-            umsAdminCacheService.setResourceList(adminId,resourceList);
-        }
-        return resourceList;
-    }
     @Override
     public int updatePassword(UpdateAdminPasswordParam updatePasswordParam) {
         return 0;
@@ -191,7 +175,7 @@ public class UmsAdminServiceImpl implements UmsAdminService {
         //获取用户信息
         UmsAdmin admin = getAdminByUsername(username);
         if (admin != null) {
-            List<UmsResource> resourceList = getResourceList(admin.getId());
+            List<UmsResource> resourceList = umsRoleService.loadAdminResource(admin.getId());
             return new AdminUserDetails(admin,resourceList);
         }
         throw new UsernameNotFoundException("用户名或密码错误");

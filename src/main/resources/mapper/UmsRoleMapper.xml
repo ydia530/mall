@@ -3,10 +3,42 @@
 
 <mapper namespace="com.yuan.mall.mapper.UmsRoleMapper">
 
-    <select id="getResourcesById" resultType="com.yuan.mall.entity.ums.UmsResource">
-        select b.id, b.name
-        from ums_role_resource_relation a join  ums_resource b on a.resource_id = b.id
-        where a.role_id = ${roleId}
+    <select id="getResourcesByRoleId" resultType="com.yuan.mall.entity.ums.UmsResource">
+        SELECT
+            b.id,
+            b.NAME
+        FROM
+            ums_role_resource_relation a
+                JOIN ums_resource b ON a.resource_id = b.id
+        WHERE
+            a.role_id = $ {roleId}
+    </select>
+
+
+    <select id="getResourcesByAdminId" resultType="com.yuan.mall.entity.ums.UmsResource">
+        SELECT
+            c.id,
+            c.NAME,
+            c.url,
+            c.category_id,
+            c.description
+        FROM
+            ums_admin_role_relation a
+                LEFT JOIN ums_role_resource_relation b ON a.role_id = b.role_id
+                LEFT JOIN ums_resource c ON b.resource_id = c.id
+        WHERE
+            a.admin_id = ${adminId}
+    </select>
+
+    <select id="getMenuList" resultType="java.lang.String">
+        SELECT
+            title
+        FROM
+            ums_admin_role_relation a
+                LEFT JOIN ums_role_menu_relation b ON a.role_id = b.role_id
+                LEFT JOIN ums_menu c ON b.menu_id = c.id
+        WHERE
+            a.admin_id = ${adminId}
     </select>
 
 </mapper>
