@@ -3,17 +3,22 @@ package com.yuan.mall.controller;
 import cn.hutool.core.collection.CollUtil;
 import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import com.yuan.mall.common.CommonResult;
+import com.yuan.mall.common.utils.CommonPage;
 import com.yuan.mall.entity.ums.UmsAdmin;
 import com.yuan.mall.entity.ums.UmsRole;
 import com.yuan.mall.pojo.dto.AdminLoginDto;
+import com.yuan.mall.pojo.dto.AllocRoleDto;
 import com.yuan.mall.pojo.dto.UmsAdminParam;
 import com.yuan.mall.service.UmsAdminService;
 import com.yuan.mall.service.UmsRoleService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import io.swagger.models.auth.In;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -50,7 +55,6 @@ public class UmsAdminController {
 
     @ApiOperation(value = "管理员注册")
     @PostMapping("/register")
-    @ResponseBody
     public CommonResult register(@Validated @RequestBody UmsAdminParam umsAdminParam, BindingResult result) {
         if (result.hasErrors()) {
             return CommonResult.failed(result.getFieldError().getDefaultMessage());
@@ -83,7 +87,6 @@ public class UmsAdminController {
 
     @ApiOperation(value = "获取当前登录用户信息")
     @RequestMapping(value = "/info", method = RequestMethod.GET)
-    @ResponseBody
     public CommonResult getAdminInfo(Principal principal) {
         if(principal==null){
             System.out.println();
@@ -102,6 +105,63 @@ public class UmsAdminController {
         }
         return CommonResult.success(data);
     }
+
+    @ApiOperation("获取指定用户信息")
+    @GetMapping(value = "/{id}")
+    public CommonResult<UmsAdmin> getAdminById(@PathVariable Integer id) {
+        UmsAdmin admin = umsAdminService.getAdminById(id);
+        return CommonResult.success(admin);
+    }
+
+    @ApiOperation("获取指定用户的角色")
+    @GetMapping(value = "/role/{adminId}")
+    @ResponseBody
+    public CommonResult<List<UmsRole>> getRoleList(@PathVariable Integer adminId) {
+        List<UmsRole> roleList = umsAdminService.getRoleList(adminId);
+        return CommonResult.success(roleList);
+    }
+
+    @ApiOperation("账号启用")
+    @PostMapping("/updateStatus/{id}")
+    public CommonResult updateAdminStatus(@PathVariable("id") Integer id, @RequestParam("status") Integer status){
+        System.out.println(id);
+        return umsAdminService.updateStatus(id, status);
+    }
+
+
+
+    @ApiOperation("更新admin信息")
+    @PutMapping("/{id}")
+    @Transactional(rollbackFor = Exception.class)
+    public CommonResult updateAdminInfo(@Param("id") Integer id,
+                                        @Validated @RequestBody UmsAdmin adminParam){
+        return umsAdminService.update(id, adminParam);
+    }
+
+
+    @ApiOperation("删除指定admin")
+    @DeleteMapping("/{id}")
+    @Transactional(rollbackFor = Exception.class)
+    public CommonResult updateAdminInfo(@PathVariable("id") Integer id){
+        return umsAdminService.delete(id);
+    }
+
+    @ApiOperation("获取admin列表")
+    @GetMapping("/list")
+    public CommonResult listAll(@RequestParam(value = "pageNum", defaultValue = "1") Integer pageNum,
+                                @RequestParam(value = "pageSize", defaultValue = "5") Integer pageSize){
+        List<UmsAdmin> roleList = umsAdminService.listAll(pageSize, pageNum);
+        return CommonResult.success(CommonPage.restPage(roleList));
+    }
+
+    @ApiOperation("分配角色")
+    @PostMapping("/allocRole")
+    public CommonResult allocRole(@RequestParam("adminId") Integer adminId,
+                                  @RequestParam("roleIds") List<Integer> roleIds){
+        CommonResult commonResult = umsAdminService.allocRoles(adminId, roleIds);
+        return commonResult;
+    }
+
 
 
 }

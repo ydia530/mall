@@ -2,13 +2,10 @@ package com.yuan.mall.service;
 
 import com.yuan.mall.common.CommonResult;
 import com.yuan.mall.entity.ums.UmsAdmin;
-import com.yuan.mall.entity.ums.UmsPermission;
-import com.yuan.mall.entity.ums.UmsResource;
 import com.yuan.mall.entity.ums.UmsRole;
 import com.yuan.mall.pojo.dto.UmsAdminParam;
 import com.yuan.mall.pojo.dto.UpdateAdminPasswordParam;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
@@ -45,7 +42,7 @@ public interface UmsAdminService {
     /**
      * 根据用户id获取用户
      */
-    UmsAdmin getItem(Integer id);
+    UmsAdmin getAdminById(Integer id);
 
     /**
      * 根据用户名或昵称分页查询用户
@@ -54,13 +51,15 @@ public interface UmsAdminService {
 
     /**
      * 修改指定用户信息
+     * @return
      */
-    int update(Integer id, UmsAdmin admin);
+    CommonResult update(Integer id, UmsAdmin admin);
 
     /**
      * 删除指定用户
+     * @return
      */
-    int delete(Integer id);
+    CommonResult delete(Integer id);
 
     /**
      * 修改用户角色关系
@@ -82,4 +81,10 @@ public interface UmsAdminService {
      * 获取用户信息
      */
     UserDetails loadUserByUsername(String username);
+
+    List<UmsAdmin> listAll(Integer pageNum, Integer pageSize);
+
+    CommonResult allocRoles(Integer adminId, List<Integer> roleIds);
+
+    CommonResult updateStatus(Integer adminId, Integer status);
 }

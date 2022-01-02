@@ -15,7 +15,18 @@
             ums_admin_role_relation a
                 LEFT JOIN ums_role b ON a.role_id = b.id
         WHERE
-            a.admin_id = 10
+            a.admin_id = ${adminId}
     </select>
+
+    <insert id="allocRoles">
+        delete from ums_admin_role_relation
+        where admin_id = ${adminId};
+        insert into ums_admin_role_relation (admin_id, role_id) values
+        <if test="roleIds != null">
+            <foreach collection="roleIds" open="(" close=")" item="id" separator="),(">
+                ${adminId}, ${id}
+            </foreach>
+        </if>
+    </insert>
 
 </mapper>

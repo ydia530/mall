@@ -2,6 +2,7 @@ package com.yuan.mall.entity.ums;
 
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
+import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
@@ -18,10 +19,12 @@ public class UmsAdmin implements Serializable {
     @TableId(type = IdType.AUTO)
     private Integer id;
 
-    @NotEmpty(message = "username不能为空！")
+    @NotEmpty
+    @ApiModelProperty(value = "用户名", required = true)
     private String username;
 
-
+    @NotEmpty
+    @ApiModelProperty(value = "密码", required = true)
     @Size(min = 8, max = 20)
     private String password;
 

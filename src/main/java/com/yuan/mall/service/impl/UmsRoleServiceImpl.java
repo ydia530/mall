@@ -1,6 +1,9 @@
 package com.yuan.mall.service.impl;
 
 import cn.hutool.core.collection.CollUtil;
+import cn.hutool.core.util.StrUtil;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.github.pagehelper.PageHelper;
 import com.yuan.mall.entity.ums.UmsMenu;
 import com.yuan.mall.entity.ums.UmsResource;
 import com.yuan.mall.entity.ums.UmsRole;
@@ -8,13 +11,13 @@ import com.yuan.mall.mapper.UmsMenuMapper;
 import com.yuan.mall.mapper.UmsRoleMapper;
 import com.yuan.mall.service.UmsAdminCacheService;
 import com.yuan.mall.service.UmsRoleService;
+import io.netty.util.internal.StringUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import javax.swing.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Queue;
 
 /**
  * @author diaoyuan
@@ -59,7 +62,14 @@ public class UmsRoleServiceImpl implements UmsRoleService {
 
     @Override
     public List<UmsRole> list(String keyword, Integer pageSize, Integer pageNum) {
-        return null;
+        PageHelper.startPage(pageNum,pageSize);
+        QueryWrapper queryWrapper = new QueryWrapper();
+        if (StrUtil.isNotEmpty(keyword)){
+            queryWrapper.like("name", keyword);
+        }
+        queryWrapper.eq("status", 1);
+
+        return umsRoleMapper.selectList(queryWrapper);
     }
 
     @Override
@@ -78,8 +88,8 @@ public class UmsRoleServiceImpl implements UmsRoleService {
     }
 
     @Override
-    public List<String> getMenuList(Integer userId) {
-        List<String> umsMenus =  umsRoleMapper.getMenuList(userId);
+    public List<UmsMenu> getMenuList(Integer userId) {
+        List<UmsMenu> umsMenus =  umsRoleMapper.getMenuList(userId);
 
         if (umsMenus.isEmpty()){
             return  new ArrayList<>();
@@ -100,4 +110,12 @@ public class UmsRoleServiceImpl implements UmsRoleService {
         }
         return resourceList;
     }
+
+    @Override
+    public List<UmsRole> listAll() {
+        QueryWrapper queryWrapper = new QueryWrapper();
+        queryWrapper.eq("status", 1);
+        return umsRoleMapper.selectList(queryWrapper);
+    }
+
 }

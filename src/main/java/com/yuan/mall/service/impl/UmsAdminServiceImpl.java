@@ -1,8 +1,8 @@
 package com.yuan.mall.service.impl;
 
 
-import cn.hutool.core.collection.CollUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.github.pagehelper.PageHelper;
 import com.yuan.mall.common.CommonResult;
 import com.yuan.mall.common.utils.JwtTokenUtil;
 import com.yuan.mall.common.utils.RequestUtil;
@@ -20,19 +20,17 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
 import javax.servlet.http.HttpServletRequest;
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
@@ -47,7 +45,6 @@ public class UmsAdminServiceImpl implements UmsAdminService {
     @Autowired
     private UmsAdminMapper umsAdminMapper;
 
-
     @Autowired
     private PasswordEncoder passwordEncoder;
 
@@ -59,6 +56,45 @@ public class UmsAdminServiceImpl implements UmsAdminService {
 
     @Autowired
     private UmsRoleService umsRoleService;
+
+
+    @Override
+    public List<UmsAdmin> listAll(Integer pageNum, Integer pageSize) {
+        PageHelper.startPage(pageNum,pageSize);
+        return umsAdminMapper.selectList(new QueryWrapper<>());
+    }
+
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public CommonResult allocRoles(Integer adminId, List<Integer> roleIds) {
+        if (roleIds.isEmpty()){
+            return CommonResult.failed("角色不能为空");
+        }
+        try{
+            //1.先删除已经有的role 2.再插入更新
+            umsAdminMapper.allocRoles(adminId, roleIds);
+            umsAdminCacheService.delResourceList(adminId);
+        } catch (Exception e){
+            log.error("更新失败" +e.getMessage());
+            return CommonResult.failed("更新失败");
+        }
+        return CommonResult.success("更新成功");
+    }
+
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public CommonResult updateStatus(Integer adminId, Integer status) {
+        try{
+            UmsAdmin updateAdmin = new UmsAdmin();
+            updateAdmin.setStatus(status);
+            QueryWrapper queryWrapper = new QueryWrapper();
+            queryWrapper.eq("id", adminId);
+            umsAdminMapper.update(updateAdmin, queryWrapper);
+        }catch (Exception e){
+            log.error("更新状态失败"+ e.getMessage());
+        }
+        return CommonResult.success("更新成功");
+    }
 
     @Override
     public UmsAdmin getAdminByUsername(String username) {
@@ -136,8 +172,8 @@ public class UmsAdminServiceImpl implements UmsAdminService {
     }
 
     @Override
-    public UmsAdmin getItem(Integer id) {
-        return null;
+    public UmsAdmin getAdminById(Integer id) {
+        return umsAdminMapper.selectById(id);
     }
 
     @Override
@@ -146,13 +182,24 @@ public class UmsAdminServiceImpl implements UmsAdminService {
     }
 
     @Override
-    public int update(Integer id, UmsAdmin admin) {
-        return 0;
+    public CommonResult update(Integer id, UmsAdmin admin) {
+        //检查是否有重复用户名
+        if (getAdminByUsername(admin.getUsername())!= null){
+            return CommonResult.failed("用户名重复");
+        }
+        admin.setId(id);
+        umsAdminMapper.updateById(admin);
+        return CommonResult.success("更新成功");
     }
 
     @Override
-    public int delete(Integer id) {
-        return 0;
+    public CommonResult delete(Integer id) {
+        if (umsAdminMapper.selectById(id) == null){
+            return CommonResult.failed("删除失败");
+        }
+
+        umsAdminMapper.deleteById(id);
+        return CommonResult.success("删除成功");
     }
 
     @Override
@@ -180,5 +227,6 @@ public class UmsAdminServiceImpl implements UmsAdminService {
         }
         throw new UsernameNotFoundException("用户名或密码错误");
     }
+
 
 }

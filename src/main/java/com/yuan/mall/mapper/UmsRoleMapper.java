@@ -1,6 +1,7 @@
 package com.yuan.mall.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.yuan.mall.entity.ums.UmsMenu;
 import com.yuan.mall.entity.ums.UmsResource;
 import com.yuan.mall.entity.ums.UmsRole;
 import org.apache.ibatis.annotations.Mapper;
@@ -17,5 +18,5 @@ public interface UmsRoleMapper extends BaseMapper<UmsRole> {
 
     List<UmsResource> getResourcesByAdminId(@Param("adminId") Integer adminId);
 
-    List<String> getMenuList(@Param("adminId") Integer adminId);
+    List<UmsMenu> getMenuList(@Param("adminId") Integer adminId);
 }

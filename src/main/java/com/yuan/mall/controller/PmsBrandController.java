@@ -5,6 +5,7 @@ import com.yuan.mall.entity.pms.PmsBrand;
 import com.yuan.mall.service.PmsBrandService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,13 +22,11 @@ import java.util.List;
 @Api(tags = "PmsBrandController", description = "商品品牌管理")
 @RestController
 @RequestMapping("/api/brand")
+@Slf4j
 public class PmsBrandController {
 
     @Autowired
     private PmsBrandService pmsBrandService;
-
-    private static final Logger LOGGER = LoggerFactory.getLogger(PmsBrandController.class);
-
     @ApiOperation("获取所有品牌列表")
     @GetMapping("/listAll")
     public CommonResult<List<PmsBrand>> getAllPmsBrand(){
@@ -40,7 +39,7 @@ public class PmsBrandController {
         try{
             pmsBrandService.createNewBrand(pmsBrand);
         }catch (Exception e){
-            LOGGER.error("创建品牌失败: " + e.getMessage());
+            log.error("创建品牌失败: " + e.getMessage());
             return CommonResult.failed("创建失败");
         }
         return CommonResult.success("创建成功");
@@ -53,7 +52,7 @@ public class PmsBrandController {
             PmsBrand pmsBrand = pmsBrandService.getById(id);
             return CommonResult.success(pmsBrand);
         }catch (Exception e){
-            LOGGER.error("查询失败: " + e.getMessage());
+            log.error("查询失败: " + e.getMessage());
             return CommonResult.failed();
         }
     }
@@ -65,7 +64,7 @@ public class PmsBrandController {
             pmsBrandService.deleteById(id);
             return CommonResult.success("删除成功");
         }catch (Exception e){
-            LOGGER.error("删除失败: " + e.getMessage());
+            log.error("删除失败: " + e.getMessage());
             return CommonResult.failed("删除失败");
         }
     }
@@ -77,7 +76,7 @@ public class PmsBrandController {
             pmsBrandService.updateById(pmsBrand);
             return CommonResult.success("更新成功");
         }catch (Exception e){
-            LOGGER.error("更新失败: " + e.getMessage());
+            log.error("更新失败: " + e.getMessage());
             return CommonResult.failed("更新失败");
         }
     }

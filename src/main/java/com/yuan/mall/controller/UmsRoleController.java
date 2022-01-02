@@ -1,6 +1,7 @@
 package com.yuan.mall.controller;
 
 import com.yuan.mall.common.CommonResult;
+import com.yuan.mall.common.utils.CommonPage;
 import com.yuan.mall.entity.ums.UmsMenu;
 import com.yuan.mall.entity.ums.UmsResource;
 import com.yuan.mall.entity.ums.UmsRole;
@@ -18,6 +19,7 @@ import java.util.List;
  * @author diaoyuan
  */
 @RestController
+@CrossOrigin
 @Api(tags = "UmsRoleController", description = "后台用户角色管理")
 @RequestMapping("/api/role")
 public class UmsRoleController {
@@ -61,18 +63,18 @@ public class UmsRoleController {
     @GetMapping(value = "/listAll")
     @ResponseBody
     public CommonResult<List<UmsRole>> listAll() {
-        List<UmsRole> roleList = umsRoleService.list();
+        List<UmsRole> roleList = umsRoleService.listAll();
         return CommonResult.success(roleList);
     }
 
     @ApiOperation("根据角色名称分页获取角色列表")
     @GetMapping(value = "/list")
     @ResponseBody
-    public CommonResult<List<UmsRole>> list(@RequestParam(value = "keyword", required = false) String keyword,
+    public CommonResult<CommonPage<UmsRole>> list(@RequestParam(value = "keyword", required = false) String keyword,
                                                   @RequestParam(value = "pageSize", defaultValue = "5") Integer pageSize,
                                                   @RequestParam(value = "pageNum", defaultValue = "1") Integer pageNum) {
         List<UmsRole> roleList = umsRoleService.list(keyword, pageSize, pageNum);
-        return CommonResult.success(roleList);
+        return CommonResult.success(CommonPage.restPage(roleList));
     }
 
     @ApiOperation("修改角色状态")

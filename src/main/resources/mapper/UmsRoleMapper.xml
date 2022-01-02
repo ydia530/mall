@@ -30,9 +30,9 @@
             a.admin_id = ${adminId}
     </select>
 
-    <select id="getMenuList" resultType="java.lang.String">
+    <select id="getMenuList" resultType="com.yuan.mall.entity.ums.UmsMenu">
         SELECT
-            title
+            c.*
         FROM
             ums_admin_role_relation a
                 LEFT JOIN ums_role_menu_relation b ON a.role_id = b.role_id
