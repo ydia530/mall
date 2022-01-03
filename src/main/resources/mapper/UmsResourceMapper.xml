@@ -7,4 +7,32 @@
         select * from ums_resource;
     </select>
 
+    <select id="getResourceCategory" resultType="com.yuan.mall.entity.ums.UmsResourceCategory">
+        select *
+        from ums_resource_category
+    </select>
+
+    <select id="selectByKeywords" resultType="com.yuan.mall.entity.ums.UmsResource">
+        SELECT
+            *
+        FROM
+            ums_resource
+        <if test="categoryId != null or url != null or name != null">
+        <where>
+            <if test="categoryId != null">
+                and category_id = ${categoryId}
+            </if>
+
+            <if test="name != null">
+                and name like '%${name}%'
+            </if>
+
+            <if test="url != null">
+                and url like '%${url}%'
+            </if>
+        </where>
+        </if>
+
+    </select>
+
 </mapper>

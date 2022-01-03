@@ -82,7 +82,7 @@ public interface UmsAdminService {
      */
     UserDetails loadUserByUsername(String username);
 
-    List<UmsAdmin> listAll(Integer pageNum, Integer pageSize);
+    List<UmsAdmin> listAll(Integer pageNum, Integer pageSize, String keyword);
 
     CommonResult allocRoles(Integer adminId, List<Integer> roleIds);
 

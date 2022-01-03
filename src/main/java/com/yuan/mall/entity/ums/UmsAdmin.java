@@ -16,6 +16,8 @@ import java.util.Date;
  */
 @Data
 public class UmsAdmin implements Serializable {
+    private static final long serialVersionUID = 1L;
+
     @TableId(type = IdType.AUTO)
     private Integer id;
 
@@ -25,7 +27,7 @@ public class UmsAdmin implements Serializable {
 
     @NotEmpty
     @ApiModelProperty(value = "密码", required = true)
-    @Size(min = 8, max = 20)
+    @Size(min = 8)
     private String password;
 
     /**

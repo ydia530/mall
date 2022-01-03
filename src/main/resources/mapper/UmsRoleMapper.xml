@@ -2,16 +2,44 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.yuan.mall.mapper.UmsRoleMapper">
+    <insert id="allocMenu">
+        DELETE
+        FROM
+            ums_role_menu_relation
+        WHERE
+            role_id = ${roleId};
+        <if test="menuIds != null and menuIds.size() > 0">
+        INSERT INTO ums_role_menu_relation ( role_id, menu_id )
+        VALUES
+            <foreach collection="menuIds" open="(" close=")" item="id" separator="),(">
+                ${roleId}, ${id}
+            </foreach>
+        </if>
+
+    </insert>
+    <insert id="allocResource">
+        DELETE
+        FROM
+        ums_role_resource_relation
+        WHERE
+        role_id = ${roleId};
+        <if test="resourceIds != null and resourceIds.size() > 0">
+            INSERT INTO ums_role_resource_relation ( role_id, resource_id )
+            VALUES
+            <foreach collection="resourceIds" open="(" close=")" item="id" separator="),(">
+                ${roleId}, ${id}
+            </foreach>
+        </if>
+    </insert>
 
     <select id="getResourcesByRoleId" resultType="com.yuan.mall.entity.ums.UmsResource">
         SELECT
-            b.id,
-            b.NAME
+            b.*
         FROM
             ums_role_resource_relation a
                 JOIN ums_resource b ON a.resource_id = b.id
         WHERE
-            a.role_id = $ {roleId}
+            a.role_id = ${roleId}
     </select>
 
 
@@ -39,6 +67,26 @@
                 LEFT JOIN ums_menu c ON b.menu_id = c.id
         WHERE
             a.admin_id = ${adminId}
+    </select>
+
+    <select id="getMenuListByRole" resultType="com.yuan.mall.entity.ums.UmsMenu">
+        SELECT
+            c.*
+        FROM
+                ums_role_menu_relation b
+                LEFT JOIN ums_menu c ON b.menu_id = c.id
+        WHERE
+            b.role_id = ${roleId}
+    </select>
+
+    <select id="getAdminsByRole" resultType="com.yuan.mall.entity.ums.UmsAdmin">
+        SELECT
+            a.*
+        FROM
+            ums_admin a
+                LEFT JOIN ums_admin_role_relation b ON a.id = b.admin_id
+        WHERE
+            b.role_id = ${roleId}
     </select>
 
 </mapper>

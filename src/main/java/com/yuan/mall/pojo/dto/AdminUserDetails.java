@@ -1,7 +1,6 @@
 package com.yuan.mall.pojo.dto;
 
 import com.yuan.mall.entity.ums.UmsAdmin;
-import com.yuan.mall.entity.ums.UmsPermission;
 import com.yuan.mall.entity.ums.UmsResource;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;

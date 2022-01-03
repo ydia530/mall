@@ -21,4 +21,5 @@ public interface UmsAdminMapper extends BaseMapper<UmsAdmin> {
 
     void allocRoles(@Param("adminId")Integer adminId, @Param("roleIds")List<Integer> roleIds);
 
+    List<UmsAdmin> listAll(@Param("keyword") String keyword);
 }

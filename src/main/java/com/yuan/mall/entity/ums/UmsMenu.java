@@ -1,17 +1,22 @@
 package com.yuan.mall.entity.ums;
 
 import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import io.swagger.annotations.ApiModelProperty;
+import jdk.nashorn.internal.ir.annotations.Ignore;
 import lombok.Data;
 
 import java.io.Serializable;
+import java.util.List;
 
 /**
  * @author diaoyuan
  */
 @Data
 public class UmsMenu implements Serializable {
+    private static final long serialVersionUID = 1L;
+
     @TableId(type = IdType.AUTO)
     private Integer id;
 
@@ -41,4 +46,7 @@ public class UmsMenu implements Serializable {
      */
     @ApiModelProperty(value = "前端隐藏")
     private Integer hidden;
+
+    @TableField(exist = false)
+    private List<UmsMenu> children;
 }

@@ -23,6 +23,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import javax.websocket.server.PathParam;
 import java.security.Principal;
 import java.util.HashMap;
 import java.util.List;
@@ -121,7 +122,7 @@ public class UmsAdminController {
         return CommonResult.success(roleList);
     }
 
-    @ApiOperation("账号启用")
+    @ApiOperation("账号启用或禁用")
     @PostMapping("/updateStatus/{id}")
     public CommonResult updateAdminStatus(@PathVariable("id") Integer id, @RequestParam("status") Integer status){
         System.out.println(id);
@@ -133,7 +134,7 @@ public class UmsAdminController {
     @ApiOperation("更新admin信息")
     @PutMapping("/{id}")
     @Transactional(rollbackFor = Exception.class)
-    public CommonResult updateAdminInfo(@Param("id") Integer id,
+    public CommonResult updateAdminInfo(@PathVariable("id") Integer id,
                                         @Validated @RequestBody UmsAdmin adminParam){
         return umsAdminService.update(id, adminParam);
     }
@@ -149,8 +150,9 @@ public class UmsAdminController {
     @ApiOperation("获取admin列表")
     @GetMapping("/list")
     public CommonResult listAll(@RequestParam(value = "pageNum", defaultValue = "1") Integer pageNum,
-                                @RequestParam(value = "pageSize", defaultValue = "5") Integer pageSize){
-        List<UmsAdmin> roleList = umsAdminService.listAll(pageSize, pageNum);
+                                @RequestParam(value = "pageSize", defaultValue = "5") Integer pageSize,
+                                @PathParam(value = "keyword") String keyword){
+        List<UmsAdmin> roleList = umsAdminService.listAll(pageSize, pageNum,keyword);
         return CommonResult.success(CommonPage.restPage(roleList));
     }
 

@@ -15,6 +15,8 @@ import java.util.Date;
  */
 @Data
 public class UmsAdminLoginLog implements Serializable {
+    private static final long serialVersionUID = 1L;
+
     @TableId(type = IdType.AUTO)
     private Long id;
 

@@ -1,7 +1,10 @@
 package com.yuan.mall.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.github.pagehelper.PageHelper;
+import com.yuan.mall.common.CommonResult;
 import com.yuan.mall.entity.ums.UmsResource;
+import com.yuan.mall.entity.ums.UmsResourceCategory;
 import com.yuan.mall.mapper.UmsResourceMapper;
 import com.yuan.mall.service.UmsResourceService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,28 +23,26 @@ public class UmsResourceServiceImpl implements UmsResourceService {
     private UmsResourceMapper umsResourceMapper;
 
     @Override
-    public int create(UmsResource umsResource) {
-        return 0;
-    }
-
-    @Override
-    public int update(Long id, UmsResource umsResource) {
-        return 0;
-    }
-
-    @Override
-    public UmsResource getItem(Long id) {
+    public CommonResult create(UmsResource umsResource) {
         return null;
     }
 
     @Override
-    public int delete(Long id) {
-        return 0;
+    public CommonResult update(Integer id, UmsResource umsResource) {
+        return null;
     }
 
     @Override
-    public List<UmsResource> list(Long categoryId, String nameKeyword, String urlKeyword, Integer pageSize, Integer pageNum) {
+    public CommonResult delete(Integer id) {
         return null;
+    }
+
+    @Override
+    public List<UmsResource> list(Integer categoryId, String nameKeyword,
+                                  String urlKeyword, Integer pageSize, Integer pageNum) {
+        PageHelper.startPage(pageNum,pageSize);
+        List<UmsResource> resourceList = umsResourceMapper.selectByKeywords(categoryId, nameKeyword, urlKeyword);
+        return resourceList;
     }
 
     @Override
@@ -52,5 +53,15 @@ public class UmsResourceServiceImpl implements UmsResourceService {
     @Override
     public List<UmsResource> getListByIds(List<Integer> ids){
         return umsResourceMapper.selectBatchIds(ids);
+    }
+
+    @Override
+    public CommonResult getCategory() {
+        return CommonResult.success(umsResourceMapper.getResourceCategory(), "查询成功");
+    }
+
+    @Override
+    public UmsResource getResource(Integer id) {
+        return null;
     }
 }

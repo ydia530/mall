@@ -8,10 +8,12 @@ import com.yuan.mall.entity.ums.UmsRole;
 import com.yuan.mall.service.UmsRoleService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import io.swagger.models.auth.In;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -30,33 +32,21 @@ public class UmsRoleController {
     @PostMapping(value = "/")
     @ResponseBody
     public CommonResult create(@RequestBody UmsRole role) {
-        int count = umsRoleService.create(role);
-        if (count > 0) {
-            return CommonResult.success(count);
-        }
-        return CommonResult.failed();
+        return umsRoleService.create(role);
     }
 
     @ApiOperation("修改角色")
     @PutMapping(value = "/{id}")
     @ResponseBody
     public CommonResult update(@PathVariable Integer id, @RequestBody UmsRole role) {
-        int count = umsRoleService.update(id, role);
-        if (count > 0) {
-            return CommonResult.success(count);
-        }
-        return CommonResult.failed();
+        return umsRoleService.update(id, role);
     }
 
     @ApiOperation("批量删除角色")
     @DeleteMapping(value = "/")
     @ResponseBody
-    public CommonResult delete(@RequestParam("ids") List<Integer> ids) {
-        int count = umsRoleService.delete(ids);
-        if (count > 0) {
-            return CommonResult.success(count);
-        }
-        return CommonResult.failed();
+    public CommonResult delete(@RequestParam("ids") Integer ids) {
+        return umsRoleService.delete(ids);
     }
 
     @ApiOperation("获取所有角色")
@@ -81,20 +71,14 @@ public class UmsRoleController {
     @PostMapping(value = "/updateStatus/{id}")
     @ResponseBody
     public CommonResult updateStatus(@PathVariable Integer id, @RequestParam(value = "status") Integer status) {
-        UmsRole umsRole = new UmsRole();
-        umsRole.setStatus(status);
-        int count = umsRoleService.update(id, umsRole);
-        if (count > 0) {
-            return CommonResult.success(count);
-        }
-        return CommonResult.failed();
+        return umsRoleService.updateStatus(id, status);
     }
 
     @ApiOperation("获取角色相关菜单")
     @GetMapping(value = "/listMenu/{roleId}")
     @ResponseBody
     public CommonResult<List<UmsMenu>> listMenu(@PathVariable Integer roleId) {
-        List<UmsMenu> roleList = umsRoleService.listMenu(roleId);
+        List<UmsMenu> roleList = umsRoleService.listMenuByRoleId(roleId);
         return CommonResult.success(roleList);
     }
 
@@ -110,16 +94,14 @@ public class UmsRoleController {
     @PostMapping(value = "/allocMenu")
     @ResponseBody
     public CommonResult allocMenu(@RequestParam Integer roleId, @RequestParam List<Integer> menuIds) {
-        int count = umsRoleService.allocMenu(roleId, menuIds);
-        return CommonResult.success(count);
+        return umsRoleService.allocMenu(roleId, menuIds);
     }
 
     @ApiOperation("给角色分配资源")
     @PostMapping(value = "/allocResource")
     @ResponseBody
     public CommonResult allocResource(@RequestParam Integer roleId, @RequestParam List<Integer> resourceIds) {
-        int count = umsRoleService.allocResource(roleId, resourceIds);
-        return CommonResult.success(count);
+        return umsRoleService.allocResource(roleId, resourceIds);
     }
 
 }

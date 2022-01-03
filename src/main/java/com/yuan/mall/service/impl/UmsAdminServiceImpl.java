@@ -1,6 +1,7 @@
 package com.yuan.mall.service.impl;
 
 
+import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.github.pagehelper.PageHelper;
 import com.yuan.mall.common.CommonResult;
@@ -59,9 +60,9 @@ public class UmsAdminServiceImpl implements UmsAdminService {
 
 
     @Override
-    public List<UmsAdmin> listAll(Integer pageNum, Integer pageSize) {
+    public List<UmsAdmin> listAll(Integer pageNum, Integer pageSize, String keyword) {
         PageHelper.startPage(pageNum,pageSize);
-        return umsAdminMapper.selectList(new QueryWrapper<>());
+        return umsAdminMapper.listAll(keyword);
     }
 
     @Override
@@ -90,6 +91,9 @@ public class UmsAdminServiceImpl implements UmsAdminService {
             QueryWrapper queryWrapper = new QueryWrapper();
             queryWrapper.eq("id", adminId);
             umsAdminMapper.update(updateAdmin, queryWrapper);
+
+            //TODO 更新后需删除缓存
+//            umsAdminCacheService.delAdmin();
         }catch (Exception e){
             log.error("更新状态失败"+ e.getMessage());
         }
@@ -182,14 +186,31 @@ public class UmsAdminServiceImpl implements UmsAdminService {
     }
 
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public CommonResult update(Integer id, UmsAdmin admin) {
-        //检查是否有重复用户名
-        if (getAdminByUsername(admin.getUsername())!= null){
-            return CommonResult.failed("用户名重复");
+        try {
+            //检查是否有重复用户名
+            UmsAdmin umsAdmin = getAdminByUsername(admin.getUsername());
+            if (!id.equals(umsAdmin.getId())){
+                return CommonResult.failed("用户名存在重复");
+            }
+            admin.setId(id);
+            if (umsAdmin.getPassword().equals(passwordEncoder.encode(admin.getPassword()))){
+                //与原密码相同
+                admin.setPassword(umsAdmin.getPassword());
+            } else{
+                //加密新密码，并更新
+                admin.setPassword(passwordEncoder.encode(admin.getPassword()));
+            }
+            umsAdminMapper.updateById(admin);
+
+            //清除缓存
+            umsAdminCacheService.delAdmin(admin.getUsername());
+            return CommonResult.success("更新成功");
+        }catch (Exception e){
+            log.error("更新失败："+ e.getMessage());
+            return CommonResult.failed("更新失败");
         }
-        admin.setId(id);
-        umsAdminMapper.updateById(admin);
-        return CommonResult.success("更新成功");
     }
 
     @Override

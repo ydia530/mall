@@ -1,5 +1,6 @@
 package com.yuan.mall.service;
 
+import com.yuan.mall.common.CommonResult;
 import com.yuan.mall.entity.ums.UmsResource;
 import com.yuan.mall.mapper.UmsResourceMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,17 +15,19 @@ import java.util.List;
  */
 
 public interface UmsResourceService {
-    int create(UmsResource umsResource);
+    CommonResult create(UmsResource umsResource);
 
-    int update(Long id, UmsResource umsResource);
+    CommonResult update(Integer id, UmsResource umsResource);
 
-    UmsResource getItem(Long id);
+    CommonResult delete(Integer id);
 
-    int delete(Long id);
-
-    List<UmsResource> list(Long categoryId, String nameKeyword, String urlKeyword, Integer pageSize, Integer pageNum);
+    List<UmsResource> list(Integer categoryId, String nameKeyword, String urlKeyword, Integer pageSize, Integer pageNum);
 
     List<UmsResource> listAll();
 
     List<UmsResource> getListByIds(List<Integer> roleId);
+
+    CommonResult getCategory();
+
+    UmsResource getResource(Integer id);
 }

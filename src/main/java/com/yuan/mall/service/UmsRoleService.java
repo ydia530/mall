@@ -1,9 +1,9 @@
 package com.yuan.mall.service;
 
+import com.yuan.mall.common.CommonResult;
 import com.yuan.mall.entity.ums.UmsMenu;
 import com.yuan.mall.entity.ums.UmsResource;
 import com.yuan.mall.entity.ums.UmsRole;
-import org.springframework.stereotype.Service;
 
 import java.util.List;
 
@@ -13,27 +13,29 @@ import java.util.List;
  */
 
 public interface UmsRoleService {
-    List<UmsMenu> listMenu(Integer roleId);
-
     List<UmsResource> listResource(Integer roleId);
 
-    int allocMenu(Integer roleId, List<Integer> menuIds);
+    CommonResult allocMenu(Integer roleId, List<Integer> menuIds);
 
-    int allocResource(Integer roleId, List<Integer> resourceIds);
-
-    int update(Integer id, UmsRole umsRole);
+    CommonResult allocResource(Integer roleId, List<Integer> resourceIds);
 
     List<UmsRole> list(String keyword, Integer pageSize, Integer pageNum);
 
     List<UmsRole> list();
 
-    int create(UmsRole role);
+    CommonResult create(UmsRole role);
 
-    int delete(List<Integer> ids);
+    CommonResult delete(Integer ids);
 
     List<UmsMenu> getMenuList(Integer id);
 
     List<UmsResource> loadAdminResource(Integer id);
 
     List<UmsRole> listAll();
+
+    CommonResult updateStatus(Integer id, Integer status);
+
+    CommonResult update(Integer id, UmsRole role);
+
+    List<UmsMenu> listMenuByRoleId(Integer roleId);
 }

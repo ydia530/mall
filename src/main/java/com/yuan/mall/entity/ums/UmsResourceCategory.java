@@ -1,25 +1,26 @@
 package com.yuan.mall.entity.ums;
 
 import com.baomidou.mybatisplus.annotation.IdType;
-import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import lombok.Data;
 
 import java.io.Serializable;
+import java.util.Date;
 
 /**
- * @author diaoyuan
+ * @author Yuan Diao
+ * @date 2022/1/3
  */
 @Data
-public class UmsAdminRoleRelation implements Serializable {
-
+public class UmsResourceCategory implements Serializable {
     private static final long serialVersionUID = 1L;
 
     @TableId(type = IdType.AUTO)
     private Integer id;
 
-    private Integer adminId;
+    private String name;
 
-    private Integer roleId;
+    private Integer sort;
 
+    private Date create_time;
 }

@@ -17,12 +17,19 @@
         WHERE
             a.admin_id = ${adminId}
     </select>
+    <select id="listAll" resultType="com.yuan.mall.entity.ums.UmsAdmin">
+        select *
+        from ums_admin
+        <if test="keyword!=null">
+            where concat(username,nick_name) like '%${keyword}%'
+        </if>
+    </select>
 
     <insert id="allocRoles">
         delete from ums_admin_role_relation
         where admin_id = ${adminId};
+        <if test="roleIds != null and roleIds.size() > 0">
         insert into ums_admin_role_relation (admin_id, role_id) values
-        <if test="roleIds != null">
             <foreach collection="roleIds" open="(" close=")" item="id" separator="),(">
                 ${adminId}, ${id}
             </foreach>

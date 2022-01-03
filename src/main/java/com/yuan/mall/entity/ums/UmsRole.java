@@ -1,15 +1,23 @@
 package com.yuan.mall.entity.ums;
 
 
+import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableId;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
 import java.io.Serializable;
 import java.util.Date;
 
+/**
+ * 系统用户角色类
+ * @author diaoyuan
+ */
 @Data
 public class UmsRole implements Serializable {
-    private Long id;
+
+    @TableId(type = IdType.AUTO)
+    private Integer id;
 
     @ApiModelProperty(value = "名称")
     private String name;

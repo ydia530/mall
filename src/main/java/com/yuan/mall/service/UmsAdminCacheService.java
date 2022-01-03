@@ -12,10 +12,10 @@ import java.util.List;
 public interface UmsAdminCacheService {
 
     /**
-     * @param adminId
+     * @param adminUsername
      * 删除后台用户缓存
      */
-    void delAdmin(Integer adminId);
+    void delAdmin(String adminUsername);
 
     /**
      * @param adminId
