@@ -40,6 +40,8 @@ public class UmsResourceServiceImpl implements UmsResourceService {
     @Override
     public List<UmsResource> list(Integer categoryId, String nameKeyword,
                                   String urlKeyword, Integer pageSize, Integer pageNum) {
+        System.out.println(pageNum);
+        System.out.println(pageSize);
         PageHelper.startPage(pageNum,pageSize);
         List<UmsResource> resourceList = umsResourceMapper.selectByKeywords(categoryId, nameKeyword, urlKeyword);
         return resourceList;
