@@ -45,8 +45,8 @@ public class PmsBrandServiceImpl implements PmsBrandService {
     }
 
     @Override
-    public List<PmsBrand> listBrand(Integer pageNum, Integer pageSize) {
-        Page<PmsBrand> page = new Page<>(pageNum, pageSize);
+    public List<PmsBrand> listBrand(Integer pageSize, Integer pageNum) {
+        Page<PmsBrand> page = new Page<>(pageSize, pageNum);
         pmsBrandMapper.selectPage(page, null);
         return page.getRecords();
     }

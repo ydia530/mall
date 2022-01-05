@@ -1,10 +1,10 @@
 package com.yuan.mall.entity.ums;
 
+import com.alibaba.fastjson.annotation.JSONField;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import io.swagger.annotations.ApiModelProperty;
-import jdk.nashorn.internal.ir.annotations.Ignore;
 import lombok.Data;
 
 import java.io.Serializable;
@@ -48,5 +48,6 @@ public class UmsMenu implements Serializable {
     private Integer hidden;
 
     @TableField(exist = false)
+    @JSONField(serialize = false)
     private List<UmsMenu> children;
 }

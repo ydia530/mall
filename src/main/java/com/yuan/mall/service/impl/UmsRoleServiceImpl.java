@@ -82,8 +82,8 @@ public class UmsRoleServiceImpl implements UmsRoleService {
     }
 
     @Override
-    public List<UmsRole> list(String keyword, Integer pageSize, Integer pageNum) {
-        PageHelper.startPage(pageNum,pageSize);
+    public List<UmsRole> list(String keyword, Integer pageNum, Integer pageSize) {
+        PageHelper.startPage(pageSize,pageNum);
         QueryWrapper queryWrapper = new QueryWrapper();
         if (StrUtil.isNotEmpty(keyword)){
             queryWrapper.like("name", keyword);

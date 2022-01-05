@@ -61,7 +61,7 @@ public class UmsAdminServiceImpl implements UmsAdminService {
 
     @Override
     public List<UmsAdmin> listAll(Integer pageNum, Integer pageSize, String keyword) {
-        PageHelper.startPage(pageNum,pageSize);
+        PageHelper.startPage(pageSize,pageNum);
         return umsAdminMapper.listAll(keyword);
     }
 
